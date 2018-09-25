@@ -24,10 +24,10 @@ class agent:
             self.info[data[0]] = data[1]
         return
     
-    def open_episode(self, flag = None):
+    def open_episode(self, flag = ""):
         return
     
-    def close_episode(self, flag = None):
+    def close_episode(self, flag = ""):
         return
     
     def take_action(self, state):
