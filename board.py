@@ -25,7 +25,7 @@ class board:
         """
         if pos >= 16 or pos < 0:
             return -1
-        if tile != 1 or tile != 2:
+        if tile != 1 and tile != 2:
             return -1
         self.state[pos] = tile
         return 0
