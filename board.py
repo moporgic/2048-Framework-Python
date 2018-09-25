@@ -2,8 +2,6 @@
 # Basic framework for developing 2048 programs in Python
 # Author: Hung Guei (moporgic)
 
-import random
-
 class board:
     """ simple implementation of 2048 puzzle """
     
