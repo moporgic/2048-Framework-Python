@@ -7,15 +7,15 @@
 class board:
     """ simple implementation of 2048 puzzle """
     
-    def __init__(self, grid = None):
-        self.grid = grid[:] if grid is not None else [0] * 16
+    def __init__(self, state = None):
+        self.state = state[:] if state is not None else [0] * 16
         return
     
     def __getitem__(self, pos):
-        return self.grid[pos]
+        return self.state[pos]
     
     def __setitem__(self, pos, tile):
-        self.grid[pos] = tile
+        self.state[pos] = tile
         return
     
     def place(self, pos, tile):
@@ -27,7 +27,7 @@ class board:
             return -1
         if tile != 1 or tile != 2:
             return -1
-        self.grid[pos] = tile
+        self.state[pos] = tile
         return 0
     
     def slide(self, opcode):
@@ -47,7 +47,7 @@ class board:
     
     def slide_left(self):
         move, score = [], 0
-        for row in [self.grid[r:r + 4] for r in range(0, 16, 4)]:
+        for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
             buf = sorted(row, key = lambda t: not t) + [0]
             while buf[0]:
                 if buf[0] == buf[1]:
@@ -57,8 +57,8 @@ class board:
                 move += [buf[0]]
                 buf = buf[1:]
             move += buf[1:]
-        if move != self.grid:
-            self.grid = move
+        if move != self.state:
+            self.state = move
             return score
         return -1
     
@@ -81,15 +81,15 @@ class board:
         return score
     
     def reflect_horizontal(self):
-        self.grid = [self.grid[r + i] for r in range(0, 16, 4) for i in reversed(range(4))]
+        self.state = [self.state[r + i] for r in range(0, 16, 4) for i in reversed(range(4))]
         return
     
     def reflect_vertical(self):
-        self.grid = [self.grid[c + i] for c in reversed(range(0, 16, 4)) for i in range(4)]
+        self.state = [self.state[c + i] for c in reversed(range(0, 16, 4)) for i in range(4)]
         return
     
     def transpose(self):
-        self.grid = [self.grid[r + i] for i in range(4) for r in range(0, 16, 4)]
+        self.state = [self.state[r + i] for i in range(4) for r in range(0, 16, 4)]
         return
     
     def rotate(self, rot = 1):
@@ -124,7 +124,7 @@ class board:
         
     def __str__(self):
         state = '+' + '-' * 24 + '+\n'
-        for row in [self.grid[r:r + 4] for r in range(0, 16, 4)]:
+        for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
             state += ('|' + ''.join('{0:6d}'.format((1 << t) & -2) for t in row) + '|\n')
         state += '+' + '-' * 24 + '+'
         return state
