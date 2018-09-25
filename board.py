@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Simple 2048 Puzzle Game (Demo)
 # Basic framework for developing 2048 programs in Python
 # Author: Hung Guei (moporgic)
@@ -124,6 +126,7 @@ class board:
             state += ('|' + ''.join('{0:6d}'.format((1 << t) & -2) for t in row) + '|\n')
         state += '+' + '-' * 24 + '+'
         return state
+    
     
 if __name__ == '__main__':
     print('2048 Demo: board.py\n')
