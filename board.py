@@ -19,7 +19,8 @@ class board:
         return
     
     def place(self, pos, tile):
-        """ place a tile (index value) to the specific position (1-d form index)
+        """
+        place a tile (index value) to the specific position (1-d form index)
         return 0 if the action is valid, or -1 if not
         """
         if pos >= 16 or pos < 0:
@@ -30,7 +31,8 @@ class board:
         return 0
     
     def slide(self, opcode):
-        """ apply an action to the board
+        """
+        apply an action to the board
         return the reward of the action, or -1 if the action is illegal
         """
         if opcode == 0:
