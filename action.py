@@ -8,7 +8,7 @@ from board import board
 
 
 class action:
-    """ action container for the framework """
+    """ base action """
     
     def __init__(self, code = -1):
         self.code = code
