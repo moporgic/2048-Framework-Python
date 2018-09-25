@@ -28,7 +28,7 @@ class action:
         return True
     
     def load(self, input):
-        """ deserialize this action from a file object """
+        """ deserialize from a file object """
         input.read(2)
         return True
     
@@ -36,17 +36,16 @@ class action:
         return "??"
     
     def event(self):
-        """ get the event code """
         return self.code & 0x00ffffff
     
     def type(self):
-        """ get the type code """
         return self.code & 0xff000000
     
         
 class slide(action):
     """ create a sliding action with board opcode """
-    type = 0x73000000 # ASCII code 's' << 24
+    
+    type = 0x73000000
     res = [ "#U", "#R", "#D", "#L", "#?" ]
     
     def __init__(self, code = -1):
@@ -74,7 +73,8 @@ action.slide = slide
         
 class place(action):
     """ create a placing action with position and tile """
-    type = 0x70000000 # ASCII code 'p' << 24
+    
+    type = 0x70000000
     res = list("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ?")
     
     def __init__(self, code = -1):
