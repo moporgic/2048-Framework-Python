@@ -30,7 +30,7 @@ class action:
     def load(self, input):
         """ deserialize from a file object """
         input.read(2)
-        return True
+        return False
     
     def __str__(self):
         return "??"
