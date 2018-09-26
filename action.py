@@ -47,6 +47,7 @@ def parse(input):
         a = proto()
         if a.load(input):
             return a
+    input.read(2)
     return action()
 action.parse = parse
         
