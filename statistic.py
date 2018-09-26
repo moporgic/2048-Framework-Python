@@ -58,11 +58,11 @@ class statistic:
         stat = [0] * 64
         sop, pop, eop = 0, 0, 0
         sdu, pdu, edu = 0, 0, 0
-        sum, max = 0, 0
+        ssc, msc = 0, 0
         for i in range(1, blk + 1):
             ep = self.data[-i]
-            sum += ep.score()
-            max = max(ep.score(), max)
+            ssc += ep.score()
+            msc = max(ep.score(), msc)
             stat[max(ep.state().state)] += 1
             sop += ep.step()
             pop += ep.step(action.slide.type)
@@ -71,8 +71,7 @@ class statistic:
             pdu += ep.time(action.slide.type)
             edu += ep.time(action.place.type)
         
-        print(count)
-        print("avg = %d, max = %d, ops = %d (%d|%d)" % (sum / blk, max, sop * 1000 / sdu, pop * 1000 / pdu, eop * 1000 / edu))
+        print("%d\t" "avg = %d, max = %d, ops = %d (%d|%d)" % (self.count, ssc / blk, msc, sop * 1000 / sdu, pop * 1000 / pdu, eop * 1000 / edu))
         
         if not tstat:
             return
@@ -83,7 +82,7 @@ class statistic:
             if not stat[t]:
                 continue
             accu = sum(stat[t:])
-            print("\t" "%d" "\t" "%f%%" "\t" "(%f%%)" % ((1 << t) & -2, accu * 100 / blk, stat[t] * 100 / blk)) # type, win rate, % of ending
+            print("\t" "%d" "\t" "%s%%" "\t" "(%s%%)" % ((1 << t) & -2, accu * 100 / blk, stat[t] * 100 / blk)) # type, win rate, % of ending
             c += stat[t]
         
         print()
