@@ -59,19 +59,14 @@ class random_agent(agent):
         seed = self.property("seed")
         if seed is not None:
             random.seed(int(seed))
-        self.rstate = random.getstate()
         return
     
     def choice(self, seq):
-        random.setstate(self.rstate)
         target = random.choice(seq)
-        self.rstate = random.getstate()
         return target
     
     def shuffle(self, seq):
-        random.setstate(self.rstate)
         random.shuffle(seq)
-        self.rstate = random.getstate()
         return
 
 
