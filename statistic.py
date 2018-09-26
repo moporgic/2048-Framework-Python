@@ -10,7 +10,6 @@ Author: Hung Guei (moporgic)
 
 from board import board
 from action import action
-from agent import agent
 from episode import episode
 
 

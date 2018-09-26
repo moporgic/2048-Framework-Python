@@ -10,7 +10,6 @@ Author: Hung Guei (moporgic)
 
 from board import board
 from action import action
-from agent import agent
 import time
 import io
 
@@ -43,6 +42,7 @@ class episode:
         usage = self.millisec() - self.ep_time
         record = action(move), reward, usage # action, reward, time usage
         self.ep_moves += [record]
+        return True
     
     def take_turns(self, play, evil):
         self.ep_time = self.millisec()
