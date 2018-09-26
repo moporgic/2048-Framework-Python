@@ -77,11 +77,7 @@ class place(action):
     type = 0x70000000
     res = list("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ?")
     
-    def __init__(self, code = -1):
-        super().__init__(place.type | code)
-        return
-    
-    def __init__(self, pos, tile):
+    def __init__(self, pos = -1, tile = -1):
         super().__init__(place.type | (pos & 0x0f) | (tile << 4))
         return
     
