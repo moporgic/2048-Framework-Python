@@ -66,17 +66,17 @@ class episode:
     def time(self, who = -1):
         if self.ep_moves:
             if who == action.slide.type:
-                return self.ep_moves[0][2] + sum([mv[2] for mv in self.ep_moves[slice(1, self.step(), 2)]]) # action, reward, time usage
+                return sum([mv[2] for mv in self.ep_moves[slice(2, self.step(), 2)]]) # action, reward, time usage
             if who == action.place.type:
-                return sum([mv[2] for mv in self.ep_moves[slice(1, self.step(), 2)]]) # action, reward, time usage
+                return self.ep_moves[0][2] + sum([mv[2] for mv in self.ep_moves[slice(1, self.step(), 2)]]) # action, reward, time usage
         return self.ep_close[1] - self.ep_open[1] # flag, time usage
     
     def actions(self, who = -1):
         if self.ep_moves:
             if who == action.slide.type:
-                return [self.ep_moves[0][0]] + [mv[0] for mv in self.ep_moves[slice(1, self.step(), 2)]] # action, reward, time usage
-            if who == action.place.type:
                 return [mv[0] for mv in self.ep_moves[slice(2, self.step(), 2)]] # action, reward, time usage
+            if who == action.place.type:
+                return [self.ep_moves[0][0]] + [mv[0] for mv in self.ep_moves[slice(1, self.step(), 2)]] # action, reward, time usage
         return [mv[0] for mv in self.ep_moves] # action, reward, time usage
         
     def save(self, output):
