@@ -42,6 +42,7 @@ class episode:
         usage = self.millisec() - self.ep_time
         record = action(move), reward, usage # action, reward, time usage
         self.ep_moves += [record]
+        self.ep_score += reward
         return True
     
     def take_turns(self, play, evil):
@@ -52,7 +53,7 @@ class episode:
             return evil
     
     def last_turns(self, play, evil):
-        return take_turns(evil, play)
+        return self.take_turns(evil, play)
     
     def step(self, who = -1):
         size = len(self.ep_moves)
@@ -65,9 +66,9 @@ class episode:
     def time(self, who = -1):
         if self.ep_moves:
             if who == action.slide.type:
-                return self.ep_moves[0][2] + sum(self.ep_moves[slice(1, self.step(), 2)]) # action, reward, time usage
+                return self.ep_moves[0][2] + sum([mv[2] for mv in self.ep_moves[slice(1, self.step(), 2)]]) # action, reward, time usage
             if who == action.place.type:
-                return sum(self.ep_moves[slice(2, self.step(), 2)]) # action, reward, time usage
+                return sum([mv[2] for mv in self.ep_moves[slice(1, self.step(), 2)]]) # action, reward, time usage
         return self.ep_close[1] - self.ep_open[1] # flag, time usage
     
     def actions(self, who = -1):
@@ -177,6 +178,7 @@ if __name__ == '__main__':
     line = "".join([str(move[0]) + ("[" + str(move[1]) + "]" if move[1] else "") + ("(" + str(move[2]) + ")" if move[2] else "") for move in moves])
     print(line)
     minput = io.StringIO(line)
+    state = board()
     while True:
         # check if EOF
         ipt = minput.tell()
@@ -185,6 +187,8 @@ if __name__ == '__main__':
         minput.seek(ipt)
         # ?? --> action
         a = action.parse(minput)
+        u = a.apply(state)
+        print("a ", str(a), str(u))
         # [?] --> reward
         ipt = minput.tell()
         if minput.read(1) == "[":
