@@ -11,6 +11,7 @@ Author: Hung Guei (moporgic)
 from board import board
 from action import action
 from episode import episode
+from collections import deque
 
 
 class statistic:
@@ -27,7 +28,7 @@ class statistic:
         self.total = total
         self.block = block if block else total
         self.limit = limit if limit else total
-        self.data = []
+        self.data = deque()
         self.count = 0
         return
     
@@ -100,9 +101,9 @@ class statistic:
     
     def open_episode(self, flag = ""):
         if self.count >= self.limit:
-            self.data = self.data[1:]
+            self.data.popleft()
         self.count += 1
-        self.data += [episode()]
+        self.data.append(episode())
         self.data[-1].open_episode(flag)
         return
     
@@ -128,12 +129,12 @@ class statistic:
     
     def load(self, input):
         """ deserialize from a file object """
-        self.data = []
+        self.data = deque()
         while True:
             # load an episode
             ep = episode()
             if ep.load(input):
-                self.data += [ep]
+                self.data.append(ep)
             else:
                 break
         self.total = max(self.total, len(self.data))
