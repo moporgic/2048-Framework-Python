@@ -41,6 +41,14 @@ class action:
     def type(self):
         return self.code & 0xff000000
     
+action.prototype = []
+def parse(input):
+    for proto in action.prototype:
+        a = proto()
+        if a.load(input):
+            return a
+    return action()
+action.parse = parse
         
 class slide(action):
     """ create a sliding action with board opcode """
@@ -69,6 +77,7 @@ class slide(action):
         return False
 
 action.slide = slide
+action.prototype += [action.slide]
 
         
 class place(action):
@@ -105,6 +114,7 @@ class place(action):
         return False
 
 action.place = place
+action.prototype += [action.place]
 
 
 if __name__ == '__main__':
