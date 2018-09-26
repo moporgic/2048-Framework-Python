@@ -40,7 +40,7 @@ class episode:
         if reward == -1:
             return False
         usage = self.millisec() - self.ep_time
-        record = action(move), reward, usage # action, reward, time usage
+        record = move, reward, usage # action, reward, time usage
         self.ep_moves += [record]
         self.ep_score += reward
         return True
