@@ -78,7 +78,7 @@ class slide(action):
         return False
 
 action.slide = slide
-action.prototype.append(action.slide)
+action.prototype += [action.slide]
 
         
 class place(action):
@@ -115,7 +115,7 @@ class place(action):
         return False
 
 action.place = place
-action.prototype.append(action.place)
+action.prototype += [action.place]
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@ class episode:
             return False
         usage = self.millisec() - self.ep_time
         record = move, reward, usage # action, reward, time usage
-        self.ep_moves.append(record)
+        self.ep_moves += [record]
         self.ep_score += reward
         return True
     
@@ -116,8 +116,7 @@ class episode:
                 # (?) --> time
                 t = self.load_optional_value(minput, "()")
                 # (action, reward, time)
-                record = a, r, t
-                self.ep_moves.append(move)
+                self.ep_moves += [(a, r, t)]
             return True
         except (RuntimeError, ValueError, IndexError):
             pass

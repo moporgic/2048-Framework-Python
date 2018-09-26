@@ -8,9 +8,6 @@ Author: Hung Guei (moporgic)
         http://www.aigames.nctu.edu.tw
 """
 
-from collections import deque
-
-
 class board:
     """ simple implementation of 2048 puzzle """
     
@@ -55,18 +52,15 @@ class board:
     def slide_left(self):
         move, score = [], 0
         for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
-            buf = deque(sorted(row, key = lambda t: not t))
-            buf.append(0)
+            buf = sorted(row, key = lambda t: not t) + [0]
             while buf[0]:
                 if buf[0] == buf[1]:
-                    buf.popleft()
-                    buf.append(0)
+                    buf = buf[1:] + [0]
                     buf[0] += 1
                     score += 1 << buf[0]
-                move.append(buf[0])
-                buf.popleft()
-            buf.popleft()
-            move.extend(buf)
+                move += [buf[0]]
+                buf = buf[1:]
+            move += buf[1:]
         if move != self.state:
             self.state = move
             return score
