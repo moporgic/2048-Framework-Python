@@ -51,16 +51,16 @@ class board:
     
     def slide_left(self):
         move, score = [], 0
-        for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
-            buf = sorted(row, key = lambda t: not t) + [0]
-            while buf[0]:
-                if buf[0] == buf[1]:
-                    buf = buf[1:] + [0]
+        for row in [self.state[r:r+4] for r in range(0, 16, 4)]:
+            row, buf = [], [t for t in row if t]
+            while buf:
+                if len(buf) >= 2 and buf[0] is buf[1]:
+                    buf = buf[1:]
                     buf[0] += 1
                     score += 1 << buf[0]
-                move += [buf[0]]
+                row += [buf[0]]
                 buf = buf[1:]
-            move += buf[1:]
+            move += row + [0] * (4 - len(row))
         if move != self.state:
             self.state = move
             return score
