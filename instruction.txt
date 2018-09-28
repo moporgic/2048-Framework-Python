@@ -1,0 +1,14 @@
+To run the sample program
+$ python3 ./2048.py # by default the program will run for 1000 games
+
+To specify the total games to run
+$ python3 ./2048.py --total=100000
+
+To specify the total games to run, and seed the environment
+$ python3 ./2048.py --total=100000 --evil=seed=1000
+
+To save the statistic result to a file
+$ python3 ./2048.py --save=stat.txt # existing file will be overwrited
+
+To load and review the statistic result from a file
+$ python3 ./2048.py --load=stat.txt
