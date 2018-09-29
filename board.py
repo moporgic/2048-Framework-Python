@@ -136,8 +136,4 @@ class board:
     
 if __name__ == '__main__':
     print('2048 Demo: board.py\n')
-    
-    state = board()
-    state[10] = 10
-    print(state)
-    
+    pass

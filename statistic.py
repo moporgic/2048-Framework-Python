@@ -146,12 +146,4 @@ class statistic:
     
 if __name__ == '__main__':
     print('2048 Demo: statistic.py\n')
-
-    stat = statistic(0)
-    with open('X:/save.txt', 'r') as save:
-        stat.load(save)
-        print(stat)
-    
-    with open('X:/test.txt', 'w') as save:
-        stat.save(save)
-        
+    pass

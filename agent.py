@@ -113,46 +113,4 @@ class player(random_agent):
     
 if __name__ == '__main__':
     print('2048 Demo: agent.py\n')
-    
-    state = board()
-    env = rndenv()
-    ply = player()
-    
-    a = env.take_action(state)
-    r = a.apply(state)
-    print(a)
-    print(r)
-    print(state)
-        
-    a = env.take_action(state)
-    r = a.apply(state)
-    print(a)
-    print(r)
-    print(state)
-    
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    
-    state = board()
-    state[0] = 1
-    state[1] = 1
-    print(state)
-    
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(ply.take_action(state))
-    print(state)
-    
+    pass
