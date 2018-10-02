@@ -10,7 +10,11 @@ Author: Hung Guei (moporgic)
 
 from board import board
 from action import action
+from weight import weight
+from array import array
 import random
+import sys
+
 
 
 class agent:
@@ -22,6 +26,12 @@ class agent:
         for option in options.split():
             data = option.split("=", 1) + [True]
             self.info[data[0]] = data[1]
+        return
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
         return
     
     def open_episode(self, flag = ""):
@@ -67,6 +77,61 @@ class random_agent(agent):
     
     def shuffle(self, seq):
         random.shuffle(seq)
+        return
+
+
+class weight_agent(agent):
+    """ base agent for agents with weight tables """
+    
+    def __init__(self, options = ""):
+        super().__init__(options)
+        self.net = []
+        init = self.property("init")
+        if init is not None:
+            self.init_weights(init)
+        load = self.property("load")
+        if load is not None:
+            self.load_weights(load)
+        return
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        save = self.property("save")
+        if save is not None:
+            self.save_weights(save)
+        return
+    
+    def init_weights(self, info):
+#         self.net += [weight(65536)]
+#         self.net += [weight(65536)]
+        return
+    
+    def load_weights(self, path):
+        input = open(path, 'rb')
+        size = array('L')
+        size.fromfile(input, 1)
+        size = size[0]
+        for i in range(size):
+            self.net += [weight()]
+            self.net[-1].load(input)
+        return
+    
+    def save_weights(self, path):
+        output = open(path, 'wb')
+        array('L', [len(self.net)]).tofile(output)
+        for w in self.net:
+            w.save(output)
+        return
+
+
+class learning_agent(agent):
+    """ base agent for agents with a learning rate """
+    
+    def __init__(self, options = ""):
+        super().__init__(options)
+        self.alpha = 0.1
+        alpha = self.property("alpha")
+        if alpha is not None:
+            self.alpha = float(alpha)
         return
 
 
