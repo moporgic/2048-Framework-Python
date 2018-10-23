@@ -8,11 +8,15 @@ Author: Hung Guei (moporgic)
         http://www.aigames.nctu.edu.tw
 """
 
+import math
+import io
+
 class board:
     """ simple implementation of 2048 puzzle """
     
     def __init__(self, state = None):
         self.state = state[:] if state is not None else [0] * 16
+        self.info = 0
         return
     
     def __getitem__(self, pos):
@@ -127,11 +131,15 @@ class board:
         return
         
     def __str__(self):
-        state = '+' + '-' * 24 + '+\n'
-        for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
-            state += ('|' + ''.join('{0:6d}'.format((1 << t) & -2) for t in row) + '|\n')
-        state += '+' + '-' * 24 + '+'
-        return state
+        return ' '.join('{0:d}'.format((1 << t) & -2) for t in self.state)
+    
+    def save(self, output):
+        output.write(self.__str__())
+        return True
+    
+    def load(self, input):
+        self.state = [math.floor(math.log2(int(t)) if t != '0' else 0) for t in input.readline().split()]
+        return True
     
     
 if __name__ == '__main__':

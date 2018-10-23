@@ -10,73 +10,33 @@ Author: Hung Guei (moporgic)
 
 from board import board
 from action import action
-from episode import episode
-from statistic import statistic
-from agent import player
-from agent import rndenv
+from solver import state_type
+from solver import state_hint
+from solver import solver
 import sys
+import io
 
 
 if __name__ == '__main__':
     print('2048 Demo: ' + " ".join(sys.argv))
     print()
     
-    total, block, limit = 1000, 0, 0
-    play_args, evil_args = "", ""
-    load, save = "", ""
-    summary = False
+    solve_args = ""
+    precision = 10
     for para in sys.argv[1:]:
-        if "--total=" in para:
-            total = int(para[(para.index("=") + 1):])
-        elif "--block=" in para:
-            block = int(para[(para.index("=") + 1):])
-        elif "--limit=" in para:
-            limit = int(para[(para.index("=") + 1):])
-        elif "--play=" in para:
-            play_args = para[(para.index("=") + 1):]
-        elif "--evil=" in para:
-            evil_args = para[(para.index("=") + 1):]
-        elif "--load=" in para:
-            load = para[(para.index("=") + 1):]
-        elif "--save=" in para:
-            save = para[(para.index("=") + 1):]
-        elif "--summary" in para:
-            summary = True
+        if "--solve=" in para:
+            solve_args = para[(para.index("=") + 1):]
+        elif "--precision=" in para:
+            precision = int(para[(para.index("=") + 1):])
     
-    stat = statistic(total, block, limit)
-    
-    if load:
-        input = open(load, "r")
-        stat.load(input)
-        input.close()
-        summary |= stat.is_finished()
-    
-    play = player(play_args)
-    evil = rndenv(evil_args)
-    
-    while not stat.is_finished():
-        play.open_episode("~:" + evil.name())
-        evil.open_episode(play.name() + ":~")
-        
-        stat.open_episode(play.name() + ":" + evil.name())
-        game = stat.back()
-        while True:
-            who = game.take_turns(play, evil)
-            move = who.take_action(game.state())
-            if not game.apply_action(move) or who.check_for_win(game.state()):
-                break
-        win = game.last_turns(play, evil)
-        stat.close_episode(win.name())
-        
-        play.close_episode(win.name())
-        evil.close_episode(win.name())
-    
-    if summary:
-        stat.summary()
-    
-    if save:
-        output = open(save, "w")
-        stat.save(output)
-        output.close()
-    
-        
+    solve = solver(solve_args)
+    state = board()
+    type = state_type()
+    hint = state_hint(state)
+    for line in sys.stdin:
+        type.load(io.StringIO(line[0:line.index(' ')]))
+        state.load(io.StringIO(line[(line.index(' ')+1):line.index('+')]))
+        hint.load(io.StringIO(line[line.index('+'):]))
+        value = solve.solve(state, type)
+        print(type, state, hint, "=", value)
+
