@@ -37,8 +37,8 @@ def shell():
             
     match_move = re.compile("^#\S+ \S+$") # e.g. "#M0001 ?", "#M0001 #U"
     match_ctrl = re.compile("^#\S+ \S+ \S+$") # e.g. "#M0001 open Slider:Placer", "#M0001 close score=15424"
-    arena_ctrl = re.compile("^@ \S+.*$") # e.g. "@ login", "@ error the account "Name" has already been taken"
-    arena_info = re.compile("^\? \S+.*$") # e.g. "? message from anonymous: 2048!!!"
+    arena_ctrl = re.compile("^@.+$") # e.g. "@ login", "@ error the account "Name" has already been taken"
+    arena_info = re.compile("^\?.+$") # e.g. "? message from anonymous: 2048!!!"
     
     for command in sys.stdin:
         command = command[:-1]
@@ -74,7 +74,7 @@ def shell():
                     host.close(id, tag)
                     
             elif arena_ctrl.match(command):
-                buf, ctrl = command.split(" ")
+                ctrl = command[1:].strip().split(" ")[0]
                 
                 if ctrl == "login":
                     # register yourself and your agents
@@ -87,18 +87,18 @@ def shell():
                     agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
                     print("%", "login: " + host.account() + "".join(agents))
                     matches = ["\n% " + ep.name() + ' ' + str(ep) for ep in host.list_matches()]
-                    print("%", "episodes: " + str(len(matches)) + "".join(matches))
+                    print("%", "match: " + str(len(matches)) + "".join(matches))
                     print("%", "----- status -----");
                     
                 elif ctrl == "error" or ctrl == "exit":
                     # error message from arena server
-                    message = command[(command.index(" ") + 1):]
+                    message = command[(re.search(r"[^@ ]", command).start()):]
                     print(message, file = sys.stderr)
                     break
                 
             elif arena_info.match(command):
                 # message from arena server
-                message = command[(command.index(" ") + 1):]
+                message = command[(re.search(r"[^? ]", command).start()):]
                 print(message, file = sys.stderr)
                 
         except Exception as ex:
