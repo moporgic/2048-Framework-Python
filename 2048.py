@@ -90,7 +90,7 @@ def shell():
                     print("%", "episodes: " + str(len(matches)) + "".join(matches))
                     print("%", "----- status -----");
                     
-                elif ctrl == "error":
+                elif ctrl == "error" or ctrl == "exit":
                     # error message from arena server
                     message = command[(command.index(" ") + 1):]
                     print(message, file = sys.stderr)
