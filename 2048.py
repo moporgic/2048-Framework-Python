@@ -42,56 +42,61 @@ def shell():
     
     for command in sys.stdin:
         command = command[:-1]
-        
-        if match_move.match(command):
-            id, move = command.split(" ")
-            
-            if move == "?":
-                # your agent need to take an action
-                a = host.at(id).take_action()
-                host.at(id).apply_action(a)
-                print(id + " " + str(a))
+        try:
+            if match_move.match(command):
+                id, move = command.split(" ")
                 
-            else:
-                # perform your opponent's action
-                a = action()
-                code = io.StringIO(move)
-                a.load(code)
-                host.at(id).apply_action(a)
-        
-        elif match_ctrl.match(command):
-            id, type, tag = command.split(" ")
-            
-            if type == "open":
-                # a new match is pending
-                if host.open(id, tag):
-                    print(id + " accept")
-                else:
-                    print(id + " reject")
+                if move == "?":
+                    # your agent need to take an action
+                    a = host.at(id).take_action()
+                    host.at(id).apply_action(a)
+                    print(id + " " + str(a))
                     
-            elif type == "close":
-                # a match is finished
-                host.close(id, tag)
-                
-        elif arena_ctrl.match(command):
-            buf, type = command.split(" ")
+                else:
+                    # perform your opponent's action
+                    a = action()
+                    code = io.StringIO(move)
+                    a.load(code)
+                    host.at(id).apply_action(a)
             
-            if type == "login":
-                # register yourself and your agents
-                agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
-                print("@ login " + host.account() + "".join(agents))
+            elif match_ctrl.match(command):
+                id, ctrl, tag = command.split(" ")
                 
-            elif type == "error":
-                # error message from arena server
+                if ctrl == "open":
+                    # a new match is pending
+                    if host.open(id, tag):
+                        print(id + " accept")
+                    else:
+                        print(id + " reject")
+                        
+                elif ctrl == "close":
+                    # a match is finished
+                    host.close(id, tag)
+                    
+            elif arena_ctrl.match(command):
+                buf, ctrl = command.split(" ")
+                
+                if ctrl == "login":
+                    # register yourself and your agents
+                    agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
+                    print("@ login " + host.account() + "".join(agents))
+                    
+                elif ctrl == "error":
+                    # error message from arena server
+                    message = command[(command.index(" ") + 1):]
+                    print(message, file = sys.stderr)
+                    break
+                
+            elif arena_info.match(command):
+                # message from arena server
                 message = command[(command.index(" ") + 1):]
                 print(message, file = sys.stderr)
-                break
-            
-        elif arena_info.match(command):
-            # message from arena server
-            message = command[(command.index(" ") + 1):]
-            print(message, file = sys.stderr)
-    
+                
+        except Exception as ex:
+            message = type(ex).__name__ + ": " + str(ex)
+            print("? report exception " + message + " at " + '"' + command + '"')
+            print("exception " + message + " at " + '"' + command + '"', file = sys.stderr)
+                   
     return
 
 if __name__ == '__main__':
