@@ -14,8 +14,85 @@ from episode import episode
 from statistic import statistic
 from agent import player
 from agent import rndenv
+from arena import arena
 import sys
+import re
+import io
 
+
+def shell():
+    host = arena("anonymous")
+    
+    for para in sys.argv[1:]:
+        if "--name=" in para or "--account=" in para:
+            host.set_account(para[(para.index("=") + 1):])
+        elif "--save=" in para or "--dump=" in para:
+            host.set_dump_file(para[(para.index("=") + 1):])
+        elif "--play=" in para:
+            play = player(para[(para.index("=") + 1):])
+            host.register_agent(play)
+        elif "--evil=" in para:
+            evil = rndenv(para[(para.index("=") + 1):])
+            host.register_agent(evil)
+            
+    match_move = re.compile("^#\S+ \S+$") # e.g. "#M0001 ?", "#M0001 #U"
+    match_ctrl = re.compile("^#\S+ \S+ \S+$") # e.g. "#M0001 open Slider:Placer", "#M0001 close score=15424"
+    arena_ctrl = re.compile("^@ \S+.*$") # e.g. "@ login", "@ error the name "AgentName" has already been taken"
+    arena_info = re.compile("^\? \S+.*$") # e.g. "? message from anonymous: 2048!!!"
+    
+    for command in sys.stdin:
+        command = command[:-1]
+        
+        if match_move.match(command):
+            id, move = command.split(" ")
+            
+            if move == "?":
+                # your agent need to take an action
+                a = host.at(id).take_action()
+                host.at(id).apply_action(a)
+                print(id + " " + str(a))
+                
+            else:
+                # perform your opponent's action
+                a = action()
+                code = io.StringIO(move)
+                a.load(code)
+                host.at(id).apply_action(a)
+        
+        elif match_ctrl.match(command):
+            id, type, tag = command.split(" ")
+            
+            if type == "open":
+                # a new match is pending
+                if host.open(id, tag):
+                    print(id + " accept")
+                else:
+                    print(id + " reject")
+                    
+            elif type == "close":
+                # a match is finished
+                host.close(id, tag)
+                
+        elif arena_ctrl.match(command):
+            buf, type = command.split(" ")
+            
+            if type == "login":
+                # register yourself and your agents
+                agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
+                print("@ login " + host.account() + "".join(agents))
+                
+            elif type == "error":
+                # error message from arena server
+                message = command[(command.index(" ") + 1):]
+                print(message, file = sys.stderr)
+                break
+            
+        elif arena_info.match(command):
+            # message from arena server
+            message = command[(command.index(" ") + 1):]
+            print(message, file = sys.stderr)
+    
+    return
 
 if __name__ == '__main__':
     print('2048 Demo: ' + " ".join(sys.argv))
@@ -42,6 +119,9 @@ if __name__ == '__main__':
             save = para[(para.index("=") + 1):]
         elif "--summary" in para:
             summary = True
+        elif "--shell" in para:
+            shell()
+            exit()
     
     stat = statistic(total, block, limit)
     
