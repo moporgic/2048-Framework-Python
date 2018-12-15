@@ -37,7 +37,7 @@ def shell():
             
     match_move = re.compile("^#\S+ \S+$") # e.g. "#M0001 ?", "#M0001 #U"
     match_ctrl = re.compile("^#\S+ \S+ \S+$") # e.g. "#M0001 open Slider:Placer", "#M0001 close score=15424"
-    arena_ctrl = re.compile("^@ \S+.*$") # e.g. "@ login", "@ error the name "AgentName" has already been taken"
+    arena_ctrl = re.compile("^@ \S+.*$") # e.g. "@ login", "@ error the account "Name" has already been taken"
     arena_info = re.compile("^\? \S+.*$") # e.g. "? message from anonymous: 2048!!!"
     
     for command in sys.stdin:
@@ -79,7 +79,16 @@ def shell():
                 if ctrl == "login":
                     # register yourself and your agents
                     agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
-                    print("@ login " + host.account() + "".join(agents))
+                    print("@", "login: " + host.account() + "".join(agents))
+                    
+                elif ctrl == "status":
+                    # display current local status
+                    print("%", "+++++ status +++++");
+                    agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
+                    print("%", "login: " + host.account() + "".join(agents))
+                    matches = ["\n% " + ep.name() + ' ' + str(ep) for ep in host.list_matches()]
+                    print("%", "episodes: " + str(len(matches)) + "".join(matches))
+                    print("%", "----- status -----");
                     
                 elif ctrl == "error":
                     # error message from arena server
@@ -94,7 +103,7 @@ def shell():
                 
         except Exception as ex:
             message = type(ex).__name__ + ": " + str(ex)
-            print("? report exception " + message + " at " + '"' + command + '"')
+            print("?", "exception " + message + " at " + '"' + command + '"')
             print("exception " + message + " at " + '"' + command + '"', file = sys.stderr)
                    
     return
