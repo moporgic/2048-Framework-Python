@@ -83,12 +83,12 @@ def shell():
                     
                 elif ctrl == "status":
                     # display current local status
-                    print("%", "+++++ status +++++");
+                    print("+++++ status +++++", file = sys.stderr)
                     agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
-                    print("%", "login: " + host.account() + "".join(agents))
+                    print("login: " + host.account() + "".join(agents), file = sys.stderr)
                     matches = ["\n% " + ep.name() + ' ' + str(ep) for ep in host.list_matches()]
-                    print("%", "match: " + str(len(matches)) + "".join(matches))
-                    print("%", "----- status -----");
+                    print("match: " + str(len(matches)) + "".join(matches), file = sys.stderr)
+                    print("----- status -----", file = sys.stderr)
                     
                 elif ctrl == "error" or ctrl == "exit":
                     # error message from arena server
