@@ -91,7 +91,7 @@ class arena:
         return self.lounge.pop(a.name(), None)
     
     def find_agent(self, name, role):
-        if name[0] == "#" and name[1:] == self.account():
+        if name[0] == "$" and name[1:] == self.account():
             for who in self.lounge.values():
                 if who.role()[0] == role[0]:
                     return who
