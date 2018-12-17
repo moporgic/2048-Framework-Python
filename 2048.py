@@ -79,7 +79,7 @@ def shell():
                 if ctrl == "login":
                     # register yourself and your agents
                     agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
-                    print("@", "login: " + host.account() + "".join(agents))
+                    print("@", "login " + host.account() + "".join(agents))
                     
                 elif ctrl == "status":
                     # display current local status
