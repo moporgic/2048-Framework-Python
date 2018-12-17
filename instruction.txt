@@ -1,0 +1,9 @@
+Keep the solver using standard input and output.
+To load some sample input from a file, use the input redirection:
+$ python3 ./2048.py < sample-input.txt
+
+To save your program's output to a file, use the output redirection:
+$ python3 ./2048.py > output.txt
+
+To load the input and save the output:
+$ python3 ./2048.py < sample-input.txt > output.txt
