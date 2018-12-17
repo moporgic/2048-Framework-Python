@@ -65,9 +65,9 @@ def shell():
                 if ctrl == "open":
                     # a new match is pending
                     if host.open(id, tag):
-                        print(id + " accept")
+                        print(id + " " + host.account() + " accept")
                     else:
-                        print(id + " reject")
+                        print(id + " " + host.account() + " reject")
                         
                 elif ctrl == "close":
                     # a match is finished
