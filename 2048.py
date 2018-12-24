@@ -26,6 +26,8 @@ def shell():
     for para in sys.argv[1:]:
         if "--name=" in para or "--account=" in para:
             host.set_account(para[(para.index("=") + 1):])
+        elif "--login=" in para:
+            host.set_login(para[(para.index("=") + 1):])
         elif "--save=" in para or "--dump=" in para:
             host.set_dump_file(para[(para.index("=") + 1):])
         elif "--play=" in para:
@@ -79,7 +81,7 @@ def shell():
                 if ctrl == "login":
                     # register yourself and your agents
                     agents = [" " + who.name() + "(" + who.role() + ")" for who in host.list_agents()]
-                    print("@", "login " + host.account() + "".join(agents))
+                    print("@", "login " + host.login() + "".join(agents))
                     
                 elif ctrl == "status":
                     # display current local status

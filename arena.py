@@ -33,12 +33,25 @@ class match(episode):
         who = self.take_turns(self.play, self.evil)
         return who.take_action(self.state())
     
+    def open_episode(self, tag = ""):
+        self.play.open_episode(tag)
+        self.evil.open_episode(tag)
+        super(match, self).open_episode(tag);
+        return
+    
+    def close_episode(self, tag = ""):
+        super(match, self).close_episode(tag);
+        self.play.open_episode(tag)
+        self.evil.open_episode(tag)
+        return
+    
 class arena:
     
     def __init__(self, name = "anonymous", path = None):
         self.ongoing = {}
         self.lounge = {}
         self.name = name
+        self.auth = name
         self.dump = None
         if path is not None:
             self.set_dump_file(path)
@@ -108,8 +121,17 @@ class arena:
     def account(self):
         return self.name
     
+    def login(self):
+        return self.auth
+    
     def set_account(self, name):
         self.name = name
+        return
+        
+    def set_login(self, res):
+        self.name = res[:res.index("|")] if "|" in res else res
+        self.auth = res
+        return
         
     def set_dump_file(self, path):
         if self.dump is not None:
