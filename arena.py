@@ -126,6 +126,7 @@ class arena:
     
     def set_account(self, name):
         self.name = name
+        self.auth = name;
         return
         
     def set_login(self, res):
