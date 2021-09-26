@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 """
-Basic framework for developing 2048 programs in Python
+Framework for 2048 & 2048-like Games (Python 3)
+agent.py: Define the behavior of variants of agents including players and environments
 
 Author: Hung Guei (moporgic)
-        Computer Games and Intelligence (CGI) Lab, NCTU, Taiwan
-        http://www.aigames.nctu.edu.tw
+        Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
+        https://cgilab.nctu.edu.tw/
 """
 
 from board import board
@@ -19,7 +20,7 @@ import sys
 
 class agent:
     """ base agent """
-    
+
     def __init__(self, options = ""):
         self.info = {}
         options = "name=unknown role=unknown " + options
@@ -27,54 +28,54 @@ class agent:
             data = option.split("=", 1) + [True]
             self.info[data[0]] = data[1]
         return
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, exc_type, exc_value, traceback):
         return
-    
+
     def open_episode(self, flag = ""):
         return
-    
+
     def close_episode(self, flag = ""):
         return
-    
+
     def take_action(self, state):
         return action()
-    
+
     def check_for_win(self, state):
         return False
-    
+
     def property(self, key):
         return self.info[key] if key in self.info else None
-    
+
     def notify(self, message):
         data = message.split("=", 1) + [True]
         self.info[data[0]] = data[1]
         return
-    
+
     def name(self):
         return self.property("name")
-    
+
     def role(self):
         return self.property("role")
 
 
 class random_agent(agent):
     """ base agent for agents with random behavior """
-    
+
     def __init__(self, options = ""):
         super().__init__(options)
         seed = self.property("seed")
         if seed is not None:
             random.seed(int(seed))
         return
-    
+
     def choice(self, seq):
         target = random.choice(seq)
         return target
-    
+
     def shuffle(self, seq):
         random.shuffle(seq)
         return
@@ -82,7 +83,7 @@ class random_agent(agent):
 
 class weight_agent(agent):
     """ base agent for agents with weight tables """
-    
+
     def __init__(self, options = ""):
         super().__init__(options)
         self.net = []
@@ -93,18 +94,18 @@ class weight_agent(agent):
         if load is not None:
             self.load_weights(load)
         return
-    
+
     def __exit__(self, exc_type, exc_value, traceback):
         save = self.property("save")
         if save is not None:
             self.save_weights(save)
         return
-    
+
     def init_weights(self, info):
 #         self.net += [weight(65536)]
 #         self.net += [weight(65536)]
         return
-    
+
     def load_weights(self, path):
         input = open(path, 'rb')
         size = array('L')
@@ -114,7 +115,7 @@ class weight_agent(agent):
             self.net += [weight()]
             self.net[-1].load(input)
         return
-    
+
     def save_weights(self, path):
         output = open(path, 'wb')
         array('L', [len(self.net)]).tofile(output)
@@ -125,7 +126,7 @@ class weight_agent(agent):
 
 class learning_agent(agent):
     """ base agent for agents with a learning rate """
-    
+
     def __init__(self, options = ""):
         super().__init__(options)
         self.alpha = 0.1
@@ -142,11 +143,11 @@ class rndenv(random_agent):
     2-tile: 90%
     4-tile: 10%
     """
-    
+
     def __init__(self, options = ""):
         super().__init__("name=random role=environment " + options)
         return
-    
+
     def take_action(self, state):
         empty = [pos for pos, tile in enumerate(state.state) if not tile]
         if empty:
@@ -155,18 +156,18 @@ class rndenv(random_agent):
             return action.place(pos, tile)
         else:
             return action()
-    
-    
+
+
 class player(random_agent):
     """
     dummy player
     select a legal action randomly
     """
-    
+
     def __init__(self, options = ""):
         super().__init__("name=dummy role=player " + options)
         return
-    
+
     def take_action(self, state):
         legal = [op for op in range(4) if board(state).slide(op) != -1]
         if legal:
@@ -174,8 +175,8 @@ class player(random_agent):
             return action.slide(op)
         else:
             return action()
-    
-    
+
+
 if __name__ == '__main__':
     print('2048 Demo: agent.py\n')
     pass

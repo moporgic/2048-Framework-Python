@@ -2,10 +2,11 @@
 
 """
 Framework for 2048 & 2048-like Games (Python 3)
+2048.py: Main file for the 2048 framework
 
 Author: Hung Guei (moporgic)
-        Computer Games and Intelligence (CGI) Lab, NCTU, Taiwan
-        http://www.aigames.nctu.edu.tw
+        Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
+        https://cgilab.nctu.edu.tw/
 """
 
 from board import board
@@ -20,7 +21,7 @@ import sys
 if __name__ == '__main__':
     print('2048 Demo: ' + " ".join(sys.argv))
     print()
-    
+
     total, block, limit = 1000, 0, 0
     play_args, evil_args = "", ""
     load, save = "", ""
@@ -42,20 +43,20 @@ if __name__ == '__main__':
             save = para[(para.index("=") + 1):]
         elif "--summary" in para:
             summary = True
-    
+
     stat = statistic(total, block, limit)
-    
+
     if load:
         input = open(load, "r")
         stat.load(input)
         input.close()
         summary |= stat.is_finished()
-    
-    with player(play_args) as play, rndenv(evil_args) as evil:    
+
+    with player(play_args) as play, rndenv(evil_args) as evil:
         while not stat.is_finished():
             play.open_episode("~:" + evil.name())
             evil.open_episode(play.name() + ":~")
-            
+
             stat.open_episode(play.name() + ":" + evil.name())
             game = stat.back()
             while True:
@@ -65,16 +66,15 @@ if __name__ == '__main__':
                     break
             win = game.last_turns(play, evil)
             stat.close_episode(win.name())
-            
+
             play.close_episode(win.name())
             evil.close_episode(win.name())
-    
+
     if summary:
         stat.summary()
-    
+
     if save:
         output = open(save, "w")
         stat.save(output)
         output.close()
-    
-        
+
