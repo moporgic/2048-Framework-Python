@@ -48,12 +48,12 @@ python3 ./2048.py --total=100000 --block=1000 --limit=1000 --play="load=weights.
 
 To train the network for 1000 games, with a specific learning rate:
 ```bash
-python3 ./2048.py --total=1000 --play="alpha=0.0025" # need to inherit from learning_agent
+python3 ./2048.py --total=1000 --play="init alpha=0.0025" # need to inherit from weight_agent
 ```
 
 To load the weights from a file, test the network for 1000 games, and save the statistic:
 ```bash
-python3 ./2048.py --total=1000 --play="load=weights.bin alpha=0" --save="stat.txt"
+python3 ./2048.py --total=1000 --play="load=weights.bin alpha=0" --save="stat.txt" # need to inherit from weight_agent
 ```
 
 ## Author
