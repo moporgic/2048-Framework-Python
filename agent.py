@@ -82,7 +82,7 @@ class random_agent(agent):
 
 
 class weight_agent(agent):
-    """ base agent for agents with weight tables """
+    """ base agent for agents with weight tables and a learning rate """
 
     def __init__(self, options = ""):
         super().__init__(options)
@@ -93,6 +93,10 @@ class weight_agent(agent):
         load = self.property("load")
         if load is not None:
             self.load_weights(load)
+        self.alpha = 0
+        alpha = self.property("alpha")
+        if alpha is not None:
+            self.alpha = float(alpha)
         return
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -121,18 +125,6 @@ class weight_agent(agent):
         array('L', [len(self.net)]).tofile(output)
         for w in self.net:
             w.save(output)
-        return
-
-
-class learning_agent(agent):
-    """ base agent for agents with a learning rate """
-
-    def __init__(self, options = ""):
-        super().__init__(options)
-        self.alpha = 0.1
-        alpha = self.property("alpha")
-        if alpha is not None:
-            self.alpha = float(alpha)
         return
 
 
