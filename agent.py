@@ -106,8 +106,8 @@ class weight_agent(agent):
         return
 
     def init_weights(self, info):
-#         self.net += [weight(65536)]
-#         self.net += [weight(65536)]
+        for i in info.split(','): # comma-separated sizes, e.g., "65536,65536"
+            self.net += [weight(int(i))]
         return
 
     def load_weights(self, path):
