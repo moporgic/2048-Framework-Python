@@ -26,22 +26,22 @@ if __name__ == '__main__':
     play_args, evil_args = "", ""
     load, save = "", ""
     summary = False
-    for para in sys.argv[1:]:
-        if "--total=" in para:
-            total = int(para[(para.index("=") + 1):])
-        elif "--block=" in para:
-            block = int(para[(para.index("=") + 1):])
-        elif "--limit=" in para:
-            limit = int(para[(para.index("=") + 1):])
-        elif "--play=" in para:
-            play_args = para[(para.index("=") + 1):]
-        elif "--evil=" in para:
-            evil_args = para[(para.index("=") + 1):]
-        elif "--load=" in para:
-            load = para[(para.index("=") + 1):]
-        elif "--save=" in para:
-            save = para[(para.index("=") + 1):]
-        elif "--summary" in para:
+    for arg in sys.argv[1:]:
+        if "--total=" in arg:
+            total = int(arg[(arg.index("=") + 1):])
+        elif "--block=" in arg:
+            block = int(arg[(arg.index("=") + 1):])
+        elif "--limit=" in arg:
+            limit = int(arg[(arg.index("=") + 1):])
+        elif "--play=" in arg:
+            play_args = arg[(arg.index("=") + 1):]
+        elif "--evil=" in arg:
+            evil_args = arg[(arg.index("=") + 1):]
+        elif "--load=" in arg:
+            load = arg[(arg.index("=") + 1):]
+        elif "--save=" in arg:
+            save = arg[(arg.index("=") + 1):]
+        elif "--summary" in arg:
             summary = True
 
     stat = statistic(total, block, limit)
