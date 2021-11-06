@@ -85,6 +85,35 @@ class board:
         self.transpose()
         return score
 
+    def rotate(self, rot = 1):
+        """ rotate the board clockwise by given times """
+        rot = ((rot % 4) + 4) % 4
+        if rot == 1:
+            self.rotate_clockwise()
+            return
+        if rot == 2:
+            self.reverse()
+            return
+        if rot == 3:
+            self.rotate_counterclockwise()
+            return
+        return
+
+    def rotate_clockwise(self):
+        self.transpose()
+        self.reflect_horizontal()
+        return
+
+    def rotate_counterclockwise(self):
+        self.transpose()
+        self.reflect_vertical()
+        return
+
+    def reverse(self):
+        self.reflect_horizontal()
+        self.reflect_vertical()
+        return
+
     def reflect_horizontal(self):
         self.state = [self.state[r + i] for r in range(0, 16, 4) for i in reversed(range(4))]
         return
@@ -95,36 +124,6 @@ class board:
 
     def transpose(self):
         self.state = [self.state[r + i] for i in range(4) for r in range(0, 16, 4)]
-        return
-
-    def rotate(self, rot = 1):
-        rot = ((rot % 4) + 4) % 4
-        if rot == 1:
-            self.rotate_right()
-            return
-        if rot == 2:
-            self.reverse()
-            return
-        if rot == 3:
-            self.rotate_left()
-            return
-        return
-
-    def rotate_right(self):
-        """ clockwise rotate the board """
-        self.transpose()
-        self.reflect_horizontal()
-        return
-
-    def rotate_left(self):
-        """ counterclockwise rotate the board """
-        self.transpose()
-        self.reflect_vertical()
-        return
-
-    def reverse(self):
-        self.reflect_horizontal()
-        self.reflect_vertical()
         return
 
     def __str__(self):
