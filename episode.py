@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Framework for 2048 & 2048-like Games (Python 3)
+Framework for 2048 & 2048-Like Games (Python 3)
 episode.py: Data structure for storing an episode
 
-Author: Hung Guei (moporgic)
+Author: Hung Guei
         Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
         https://cgilab.nctu.edu.tw/
 """
@@ -46,15 +46,12 @@ class episode:
         self.ep_score += reward
         return True
 
-    def take_turns(self, play, evil):
+    def take_turns(self, slide, place):
         self.ep_time = self.millisec()
-        if max(self.step() + 1, 2) % 2 != 0:
-            return play
-        else:
-            return evil
+        return place if (self.step() < 2 or self.step() % 2 != 0) else slide
 
-    def last_turns(self, play, evil):
-        return self.take_turns(evil, play)
+    def last_turns(self, slide, place):
+        return self.take_turns(place, slide) if (self.step() > 2) else place
 
     def step(self, who = -1):
         size = len(self.ep_moves)
