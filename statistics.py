@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Framework for 2048 & 2048-like Games (Python 3)
-statistic.py: Utility for making statistical reports
+Framework for 2048 & 2048-Like Games (Python 3)
+statistics.py: Utility for making statistical reports
 
-Author: Hung Guei (moporgic)
+Author: Hung Guei
         Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
         https://cgilab.nctu.edu.tw/
 """
@@ -14,13 +14,13 @@ from action import action
 from episode import episode
 
 
-class statistic:
-    """ container & statistic of episodes """
+class statistics:
+    """ container & statistics of episodes """
 
     def __init__(self, total, block = 0, limit = 0):
         """
         the total episodes to run
-        the block size of statistic
+        the block size of statistics
         the limit of saving records
 
         note that total >= limit >= block
@@ -32,11 +32,11 @@ class statistic:
         self.count = 0
         return
 
-    def show(self, tstat = True):
+    def show(self, tstat = True, blk = int(0)):
         """
-        show the statistic of last 'block' games
+        show the statistics of last 'block' games
 
-        the format would be
+        the format is
         1000   avg = 273901, max = 382324, ops = 241563 (170543|896715)
                512     100%   (0.3%)
                1024    99.7%  (0.2%)
@@ -45,22 +45,21 @@ class statistic:
                8192    93.7%  (22.4%)
                16384   71.3%  (71.3%)
 
-        where (block = 1000 by default)
-         '1000': current index (n)
-         'avg = 273901': the average score is 273901
-         'max = 382324': the maximum score is 382324
+        where
+         '1000': current index
+         'avg = 273901, max = 382324': the average score is 273901
          'ops = 241563 (170543|896715)': the average speed is 241563
-                                         the average speed of player is 170543
-                                         the average speed of environment is 896715
-         '93.7%': 93.7% (937 games) reached 8192-tiles (a.k.a. win rate of 8192-tile)
-         '22.4%': 22.4% (224 games) terminated with 8192-tiles (the largest)
+                                         the average speed of the slider is 170543
+                                         the average speed of the placer is 896715
+         '93.7%': 93.7% of the games reached 8192-tiles, i.e., win rate of 8192-tile
+         '22.4%': 22.4% of the games terminated with 8192-tiles as the largest tile
         """
-        blk = min(len(self.data), self.block)
+        num = min(len(self.data), (blk if blk != 0 else self.block))
         stat = [0] * 64
         sop, pop, eop = 0, 0, 0
         sdu, pdu, edu = 0, 0, 0
         ssc, msc = 0, 0
-        for i in range(1, blk + 1):
+        for i in range(1, num + 1):
             ep = self.data[-i]
             ssc += ep.score()
             msc = max(ep.score(), msc)
@@ -72,28 +71,34 @@ class statistic:
             pdu += ep.time(action.slide.type)
             edu += ep.time(action.place.type)
 
-        print("%d\t" "avg = %d, max = %d, ops = %d (%d|%d)" % (self.count, ssc / blk, msc, sop * 1000 / sdu, pop * 1000 / pdu, eop * 1000 / edu))
+        print("%d\t" "avg = %d, max = %d, ops = %s (%s|%s)" % (
+            self.count,
+            ssc / num,
+            msc,
+            int(sop * 1000 / sdu) if sdu > 0 else "inf",
+            int(pop * 1000 / pdu) if pdu > 0 else "inf",
+            int(eop * 1000 / edu) if edu > 0 else "inf"))
 
         if not tstat:
             return
         c = 0
         for t in range(0, len(stat)):
-            if c >= blk:
+            if c >= num:
                 break
             if not stat[t]:
                 continue
             accu = sum(stat[t:])
-            print("\t" "%d" "\t" "%s%%" "\t" "(%s%%)" % ((1 << t) & -2, accu * 100 / blk, stat[t] * 100 / blk)) # type, win rate, % of ending
+            print("\t" "%d" "\t" "%s%%" "\t" "(%s%%)" % (
+                (1 << t) & -2,
+                accu * 100.0 / num,
+                stat[t] * 100.0 / num)) # type, win rate, % of ending
             c += stat[t]
 
         print()
         return
 
     def summary(self):
-        block = self.block
-        self.block = len(self.data)
-        self.show()
-        self.block = block
+        self.show(tstat=True, blk=len(self.data))
         return
 
     def is_finished(self):
@@ -122,6 +127,9 @@ class statistic:
     def back(self):
         return self.data[-1]
 
+    def step(self):
+        return self.count
+
     def save(self, output):
         """ serialize this action to a file object """
         output.write(self.__str__())
@@ -146,5 +154,5 @@ class statistic:
 
 
 if __name__ == '__main__':
-    print('2048 Demo: statistic.py\n')
+    print('2048 Demo: statistics.py\n')
     pass
