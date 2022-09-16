@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Framework for 2048 & 2048-like Games (Python 3)
+Framework for 2048 & 2048-Like Games (Python 3)
 board.py: Define the game state and basic operations of the game of 2048
 
-Author: Hung Guei (moporgic)
+Author: Hung Guei
         Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
         https://cgilab.nctu.edu.tw/
 """
@@ -12,8 +12,9 @@ Author: Hung Guei (moporgic)
 class board:
     """ simple implementation of 2048 puzzle """
 
-    def __init__(self, state = None):
+    def __init__(self, state = None, info = None):
         self.state = state[:] if state is not None else [0] * 16
+        self.info = info
         return
 
     def __getitem__(self, pos):
@@ -25,10 +26,10 @@ class board:
 
     def place(self, pos, tile):
         """
-        place a tile (index value) to the specific position (1-d form index)
+        place a tile (index value) to the specific position (1-d index)
         return 0 if the action is valid, or -1 if not
         """
-        if pos >= 16 or pos < 0:
+        if pos >= 16 or pos < 0 or self.state[pos] != 0:
             return -1
         if tile != 1 and tile != 2:
             return -1

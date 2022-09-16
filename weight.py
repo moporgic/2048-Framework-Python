@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Framework for 2048 & 2048-like Games (Python 3)
+Framework for 2048 & 2048-Like Games (Python 3)
 weight.py: Lookup table template for n-tuple network
 
-Author: Hung Guei (moporgic)
+Author: Hung Guei
         Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
         https://cgilab.nctu.edu.tw/
 """
