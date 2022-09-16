@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 """
-Framework for 2048 & 2048-like Games (Python 3)
+Framework for 2048 & 2048-Like Games (Python 3)
 agent.py: Define the behavior of variants of agents including players and environments
 
-Author: Hung Guei (moporgic)
+Author: Hung Guei
         Computer Games and Intelligence (CGI) Lab, NYCU, Taiwan
         https://cgilab.nctu.edu.tw/
 """
@@ -128,16 +128,16 @@ class weight_agent(agent):
         return
 
 
-class rndenv(random_agent):
+class random_placer(random_agent):
     """
-    random environment
+    default random environment
     add a new random tile to an empty cell
     2-tile: 90%
     4-tile: 10%
     """
 
     def __init__(self, options = ""):
-        super().__init__("name=random role=environment " + options)
+        super().__init__("name=place role=placer " + options)
         return
 
     def take_action(self, state):
@@ -150,14 +150,14 @@ class rndenv(random_agent):
             return action()
 
 
-class player(random_agent):
+class random_slider(random_agent):
     """
-    dummy player
+    random player, i.e., slider
     select a legal action randomly
     """
 
     def __init__(self, options = ""):
-        super().__init__("name=dummy role=player " + options)
+        super().__init__("name=slide role=slider " + options)
         return
 
     def take_action(self, state):
